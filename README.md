@@ -5,6 +5,7 @@
 - Implement a UI slider for parameter 'n' for n body simulation
 
 #### Sources of Inspiration:
+- https://pavelsevecek.github.io/
 - https://www.youtube.com/watch?v=VVIPjRxDKHc 
 - https://www.youtube.com/watch?v=tOlKLJ4WmSE&t=373s
 - https://www.youtube.com/watch?v=GjbcvqEOIuE
