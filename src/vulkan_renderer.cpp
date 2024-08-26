@@ -13,6 +13,7 @@ bool VulkanRenderer::init(GLFWwindow* window) {
 
 void VulkanRenderer::drawFrame() {
     // Placeholder for rendering code
+    std::cout << "Drawing frame..." << std::endl;
     // TODO: Add Vulkan rendering code here
 }
 
