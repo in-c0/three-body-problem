@@ -1,3 +1,14 @@
+⚠️As of 26/08/2024, the project is in WIP and may not be functioning as described
+### TODO
+- Complete CMake configuration
+- Set up tests for the app initialisation/library integration
+- Implement a UI slider for parameter 'n' for n body simulation
+
+#### Sources of Inspiration:
+- https://www.youtube.com/watch?v=VVIPjRxDKHc 
+- https://www.youtube.com/watch?v=tOlKLJ4WmSE&t=373s
+- https://www.youtube.com/watch?v=GjbcvqEOIuE
+
 # Three-body-problem
 A real-time simulation of the three-body problem using Fortran, wrapped in C++ and rendered with Vulkan.
 
