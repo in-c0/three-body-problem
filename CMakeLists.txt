@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 # Include directories
 include_directories(${CMAKE_SOURCE_DIR}/include)
+include_directories(${CMAKE_SOURCE_DIR}/third_party/glm)
 include_directories(${CMAKE_SOURCE_DIR}/third_party/imgui)
 include_directories(${CMAKE_SOURCE_DIR}/third_party/glfw/include)
 
@@ -67,5 +68,5 @@ add_executable(${PROJECT_NAME} ${SOURCES} ${FORTRAN_SOURCES})
 # Ensure shaders are compiled before building the executable
 add_dependencies(${PROJECT_NAME} compile_shaders)
 
-# Link Vulkan and other necessary libraries
+# Link Vulkan, GLM, and other necessary libraries
 target_link_libraries(${PROJECT_NAME} Vulkan::Vulkan glfw imgui)
