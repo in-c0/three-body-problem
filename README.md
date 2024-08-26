@@ -49,7 +49,7 @@ Follow the [installation guide](#installation-guide) for detailed instructions a
 1. **Clone the Repository:**
 
     ```bash
-    git clone https://github.com/yourusername/three-body-simulation.git
+    git clone https://github.com/in-c0/three-body-simulation.git
     cd three-body-simulation
     ```
 
