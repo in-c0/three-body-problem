@@ -27,9 +27,6 @@ add_library(imgui STATIC
 # Include directories for ImGui
 target_include_directories(imgui PUBLIC third_party/imgui third_party/imgui/backends)
 
-
-#### VULKAN
-
 # Shader Compilation
 file(GLOB SHADER_SOURCES "${CMAKE_SOURCE_DIR}/shaders/*.glsl")
 
@@ -49,7 +46,6 @@ foreach(SHADER ${SHADER_SOURCES})
 endforeach()
 
 add_custom_target(compile_shaders ALL DEPENDS ${SPIRV_BINARIES})
-
 
 # Source files
 set(SOURCES
