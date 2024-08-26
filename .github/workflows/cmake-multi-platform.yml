@@ -47,7 +47,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        submodules: true 
+        submodules: recursive 
 
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
@@ -61,7 +61,7 @@ jobs:
       if: matrix.os == 'ubuntu-latest'
       run: |
         sudo apt-get update
-        sudo apt-get install -y libglfw3-dev libglm-dev libxkbcommon-dev wget tar
+        sudo apt-get install -y libglfw3-dev libglm-dev libxkbcommon-dev libxinerama-dev wget tar
         wget https://sdk.lunarg.com/sdk/download/1.3.239.0/linux/vulkan-sdk-1.3.239.0-linux.tar.gz
         tar -xzf vulkan-sdk-1.3.239.0-linux.tar.gz
         export VULKAN_SDK=$(pwd)/1.3.239.0/x86_64
