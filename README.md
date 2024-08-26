@@ -42,10 +42,9 @@ To build and run this project, you need the following dependencies installed:
 - **GLM** (for mathematics)
 - **Dear ImGui** (for the GUI interface)
 
-Follow the [installation guide](#installation-guide) for detailed instructions and continue to [Building the project](#building) once all the prerequisites are installed on your machine.
+Follow the [installation guide](#installation-guide) for detailed instructions and continue to building the project once all the prerequisites are installed on your machine.
 
 ## Building the Project
-[ ](#building)
 
 1. **Clone the Repository:**
 
