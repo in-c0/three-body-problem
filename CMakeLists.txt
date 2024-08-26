@@ -11,6 +11,46 @@ include_directories(${CMAKE_SOURCE_DIR}/third_party/glfw/include)
 # Find Vulkan
 find_package(Vulkan REQUIRED)
 
+# Add GLFW
+add_subdirectory(third_party/glfw)
+
+# Add ImGui
+add_library(imgui STATIC
+    third_party/imgui/imgui.cpp
+    third_party/imgui/imgui_draw.cpp
+    third_party/imgui/imgui_tables.cpp
+    third_party/imgui/imgui_widgets.cpp
+    third_party/imgui/backends/imgui_impl_glfw.cpp
+    third_party/imgui/backends/imgui_impl_vulkan.cpp
+)
+
+# Include directories for ImGui
+target_include_directories(imgui PUBLIC third_party/imgui third_party/imgui/backends)
+
+
+#### VULKAN
+
+# Shader Compilation
+file(GLOB SHADER_SOURCES "${CMAKE_SOURCE_DIR}/shaders/*.glsl")
+
+foreach(SHADER ${SHADER_SOURCES})
+    get_filename_component(SPIRV_OUTPUT_FILE ${SHADER} NAME_WE)
+    set(SPIRV_OUTPUT_FILE "${CMAKE_SOURCE_DIR}/shaders/${SPIRV_OUTPUT_FILE}.spv")
+
+    add_custom_command(
+        OUTPUT ${SPIRV_OUTPUT_FILE}
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_SOURCE_DIR}/shaders/"
+        COMMAND glslangValidator -V ${SHADER} -o ${SPIRV_OUTPUT_FILE}
+        DEPENDS ${SHADER}
+        COMMENT "Compiling ${SHADER} to SPIR-V..."
+    )
+
+    list(APPEND SPIRV_BINARIES ${SPIRV_OUTPUT_FILE})
+endforeach()
+
+add_custom_target(compile_shaders ALL DEPENDS ${SPIRV_BINARIES})
+
+
 # Source files
 set(SOURCES
     src/main.cpp
@@ -27,6 +67,9 @@ set(FORTRAN_SOURCES
 
 # Executable
 add_executable(${PROJECT_NAME} ${SOURCES} ${FORTRAN_SOURCES})
+
+# Ensure shaders are compiled before building the executable
+add_dependencies(${PROJECT_NAME} compile_shaders)
 
 # Link Vulkan and other necessary libraries
 target_link_libraries(${PROJECT_NAME} Vulkan::Vulkan glfw imgui)
