@@ -100,38 +100,19 @@ The Vulkan SDK includes the Vulkan libraries, drivers, and development tools nee
 - **macOS**: Download the latest version from the [LunarG Vulkan SDK](https://vulkan.lunarg.com/sdk/home). Note that Vulkan support on macOS is provided through MoltenVK.
 - **Windows**: Download and install from the [LunarG Vulkan SDK](https://vulkan.lunarg.com/sdk/home).
 
-### 4. GLFW (for window management)
-GLFW is an open-source library for creating windows, contexts, and handling input for OpenGL, Vulkan, and other rendering libraries.
-
-#### Installation:
-- **Linux**: Install via your package manager (e.g., `sudo apt-get install libglfw3-dev` for Ubuntu) or build from source [here](https://www.glfw.org/download.html).
-- **macOS**: Install via Homebrew: `brew install glfw`.
-- **Windows**: Download and build from source [here](https://www.glfw.org/download.html) or use a package manager like vcpkg: `vcpkg install glfw3`.
-
-### 5. GLM (for mathematics)
-GLM is a header-only C++ mathematics library that provides classes and functions designed for graphics software.
-
-#### Installation:
-- **Linux/macOS/Windows**: Download from the [GLM GitHub repository](https://github.com/g-truc/glm) and include it in your project.
-
-### 6. Dear ImGui (for the GUI interface)
-Dear ImGui is a bloat-free graphical user interface library for C++ that can be easily integrated with GLFW and Vulkan.
-
-#### Installation:
-- **Linux/macOS/Windows**: Clone the repository from the [Dear ImGui GitHub](https://github.com/ocornut/imgui) and follow the setup instructions for Vulkan and GLFW.
-
-
 ### Setting Up Dependencies
 
-Dependencies are included in the third_party directory, but you can also add them as a separate submodule:
+The following dependencies are already included in the `third_party` directory: 
+- **GLFW**
+- **GLM**
+- **Dear ImGui**
 
-- **Vulkan SDK**: Download and install the Vulkan SDK from [LunarG Vulkan SDK](https://vulkan.lunarg.com/).
-- **GLFW** and **GLM**: These can be downloaded and included in the `third_party/` directory, or you can use package managers like `vcpkg` or `conan` to manage them.
-- **Dear ImGui**: You can include Dear ImGui in the `third_party/` directory or fetch it as a submodule.
+you can choose to add new dependencies or use package managers like `vcpkg` or `conan` to manage them.
 
 Example:
 ```
 git submodule add https://github.com/glfw/glfw.git third_party/glfw
+git submodule add https://github.com/g-truc/glm.git third_party/glm
 git submodule add https://github.com/ocornut/imgui.git third_party/imgui
 git submodule update --init --recursive
 ```
@@ -162,10 +143,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- [Vulkan](https://vulkan.lunarg.com/) - The graphics API used.
-- [Dear ImGui](https://github.com/ocornut/imgui) - For the immediate mode GUI.
-- [GLFW](https://www.glfw.org/) - For window and input management.
-- [GLM](https://glm.g-truc.net/0.9.9/index.html) - For math operations.
+- [LunarG Vulkan SDK](https://vulkan.lunarg.com/) - Graphics API
+- [Dear ImGui](https://github.com/ocornut/imgui) - GUI
+- [GLFW](https://www.glfw.org/) - Input management
+- [GLM](https://glm.g-truc.net/0.9.9/index.html) - Math utilities
 
 ## Contact
 
