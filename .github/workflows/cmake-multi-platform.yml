@@ -54,6 +54,22 @@ jobs:
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
 
+    # Dependencies installing on Ubuntu (eg Vulkan SDK)
+    - name: Install dependencies on Ubuntu
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libglfw3-dev libglm-dev wget tar
+        wget -qO- https://sdk.lunarg.com/sdk/download/latest/linux/vulkan-sdk.tar.gz | tar xz -C /tmp
+        echo "/tmp/$(ls /tmp | grep VulkanSDK)/x86_64/lib" | sudo tee -a /etc/ld.so.conf.d/vulkan.conf
+        sudo ldconfig
+        echo "/tmp/$(ls /tmp | grep VulkanSDK)/x86_64" > $GITHUB_ENV
+        echo "VULKAN_SDK=/tmp/$(ls /tmp | grep VulkanSDK)/x86_64" >> $GITHUB_ENV
+        echo "PATH=$VULKAN_SDK/bin:$PATH" >> $GITHUB_ENV
+        echo "LD_LIBRARY_PATH=$VULKAN_SDK/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+        echo "VK_ICD_FILENAMES=$VULKAN_SDK/etc/vulkan/icd.d" >> $GITHUB_ENV
+        echo "VK_LAYER_PATH=$VULKAN_SDK/etc/vulkan/explicit_layer.d" >> $GITHUB_ENV
+
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
