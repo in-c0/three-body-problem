@@ -42,7 +42,10 @@ To build and run this project, you need the following dependencies installed:
 - **GLM** (for mathematics)
 - **Dear ImGui** (for the GUI interface)
 
+Follow the [installation guide](#installation-guide) for detailed instructions and continue to [Building the project](#building) once all the prerequisites are installed on your machine.
+
 ## Building the Project
+[ ](#building)
 
 1. **Clone the Repository:**
 
@@ -71,6 +74,54 @@ To build and run this project, you need the following dependencies installed:
     ```
 
 
+## Installation Guide
+[](#installation-guide)
+
+### 1. CMake (version 3.10 or higher)
+CMake is a cross-platform build system that helps manage the build process of software using a simple, platform-independent configuration file.
+
+#### Installation:
+- **Linux**: Install via your package manager (e.g., `sudo apt-get install cmake` for Ubuntu).
+- **macOS**: Install via Homebrew: `brew install cmake`.
+- **Windows**: Download and install from the [official website](https://cmake.org/download/).
+
+### 2. Fortran Compiler
+A Fortran compiler is required to compile the Fortran source code.
+
+#### Recommended: gfortran
+- **Linux**: Install via your package manager (e.g., `sudo apt-get install gfortran` for Ubuntu).
+- **macOS**: Install via Homebrew: `brew install gcc` (gfortran is included).
+- **Windows**: Install via [MinGW](http://www.mingw.org/) or [Cygwin](https://www.cygwin.com/).
+
+### 3. Vulkan SDK
+The Vulkan SDK includes the Vulkan libraries, drivers, and development tools needed for building Vulkan applications.
+
+#### Installation:
+- **Linux**: Download the latest version from the [LunarG Vulkan SDK](https://vulkan.lunarg.com/sdk/home).
+- **macOS**: Download the latest version from the [LunarG Vulkan SDK](https://vulkan.lunarg.com/sdk/home). Note that Vulkan support on macOS is provided through MoltenVK.
+- **Windows**: Download and install from the [LunarG Vulkan SDK](https://vulkan.lunarg.com/sdk/home).
+
+### 4. GLFW (for window management)
+GLFW is an open-source library for creating windows, contexts, and handling input for OpenGL, Vulkan, and other rendering libraries.
+
+#### Installation:
+- **Linux**: Install via your package manager (e.g., `sudo apt-get install libglfw3-dev` for Ubuntu) or build from source [here](https://www.glfw.org/download.html).
+- **macOS**: Install via Homebrew: `brew install glfw`.
+- **Windows**: Download and build from source [here](https://www.glfw.org/download.html) or use a package manager like vcpkg: `vcpkg install glfw3`.
+
+### 5. GLM (for mathematics)
+GLM is a header-only C++ mathematics library that provides classes and functions designed for graphics software.
+
+#### Installation:
+- **Linux/macOS/Windows**: Download from the [GLM GitHub repository](https://github.com/g-truc/glm) and include it in your project.
+
+### 6. Dear ImGui (for the GUI interface)
+Dear ImGui is a bloat-free graphical user interface library for C++ that can be easily integrated with GLFW and Vulkan.
+
+#### Installation:
+- **Linux/macOS/Windows**: Clone the repository from the [Dear ImGui GitHub](https://github.com/ocornut/imgui) and follow the setup instructions for Vulkan and GLFW.
+
+
 ### Setting Up Dependencies
 
 Dependencies are included in the third_party directory, but you can also add them as a separate submodule:
@@ -85,7 +136,6 @@ git submodule add https://github.com/glfw/glfw.git third_party/glfw
 git submodule add https://github.com/ocornut/imgui.git third_party/imgui
 git submodule update --init --recursive
 ```
-
 
 
 ## Running the Simulation
