@@ -63,13 +63,14 @@ jobs:
         echo "VK_ICD_FILENAMES=$VULKAN_SDK/etc/vulkan/icd.d" >> $GITHUB_ENV
         echo "VK_LAYER_PATH=$VULKAN_SDK/etc/vulkan/explicit_layer.d" >> $GITHUB_ENV
 
+    # Clean build directory conditionally based on OS
     - name: Clean build directory
       run: |
         if [ $RUNNER_OS = 'Linux' ]; then
           rm -rf ${{ env.build-output-dir }}
         elif [ $RUNNER_OS = 'Windows' ]; then
-          del /q ${{ env.build-output-dir }}\*
-          rmdir /s /q ${{ env.build-output-dir }}
+          cmd /c "del /q ${{ env.build-output-dir }}\\*"
+          cmd /c "rmdir /s /q ${{ env.build-output-dir }}"
         fi
       shell: bash
 
