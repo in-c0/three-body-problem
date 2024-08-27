@@ -6,6 +6,7 @@
 
 #### Sources of Inspiration:
 - https://pavelsevecek.github.io/
+- https://github.com/pavelsevecek/OpenSPH
 - https://www.youtube.com/watch?v=VVIPjRxDKHc 
 - https://www.youtube.com/watch?v=tOlKLJ4WmSE&t=373s
 - https://www.youtube.com/watch?v=GjbcvqEOIuE
