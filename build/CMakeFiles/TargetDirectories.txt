@@ -1,3 +1,0 @@
-E:/Git Remote Repositories/three-body-problem/build/CMakeFiles/ThreeBodySimulation.dir
-E:/Git Remote Repositories/three-body-problem/build/CMakeFiles/edit_cache.dir
-E:/Git Remote Repositories/three-body-problem/build/CMakeFiles/rebuild_cache.dir

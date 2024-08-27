@@ -1,3 +1,15 @@
+# Build directory
+/build/
+
+
+# CMake files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.ninja
+
+
 # Prerequisites
 *.d
 
@@ -6,6 +18,13 @@
 *.lo
 *.o
 *.obj
+
+# Compiled library files
+*.a
+*.lib
+*.so
+*.dll
+*.dylib
 
 # Precompiled Headers
 *.gch
@@ -30,3 +49,12 @@
 *.exe
 *.out
 *.app
+
+# Temporary files
+*.log
+*.tmp
+*.bak
+
+# OS-specific files
+.DS_Store
+Thumbs.db
