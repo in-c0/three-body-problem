@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.10)
 project(ThreeBodySimulationVulkan)
 
 set(CMAKE_CXX_STANDARD 17)
+# set(CMAKE_Fortran_COMPILER "C:/msys64/mingw64/bin/gfortran.exe")
+# set(CMAKE_Fortran_FLAGS "-Wall -g")
 
 # Include directories
 include_directories(${CMAKE_SOURCE_DIR}/include)
@@ -31,22 +33,27 @@ target_include_directories(imgui PUBLIC third_party/imgui third_party/imgui/back
 # Shader Compilation
 file(GLOB SHADER_SOURCES "${CMAKE_SOURCE_DIR}/shaders/*.glsl")
 
+set(SPIRV_BINARIES "")
+
 foreach(SHADER ${SHADER_SOURCES})
     get_filename_component(SPIRV_OUTPUT_FILE ${SHADER} NAME_WE)
     set(SPIRV_OUTPUT_FILE "${CMAKE_SOURCE_DIR}/shaders/${SPIRV_OUTPUT_FILE}.spv")
 
-    add_custom_command(
-        OUTPUT ${SPIRV_OUTPUT_FILE}
-        COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_SOURCE_DIR}/shaders/"
-        COMMAND glslangValidator -V ${SHADER} -o ${SPIRV_OUTPUT_FILE}
-        DEPENDS ${SHADER}
-        COMMENT "Compiling ${SHADER} to SPIR-V..."
-    )
-
-    list(APPEND SPIRV_BINARIES ${SPIRV_OUTPUT_FILE})
+    # Add only if it does not exist yet
+    if(NOT TARGET ${SPIRV_OUTPUT_FILE})
+        add_custom_command(
+            OUTPUT ${SPIRV_OUTPUT_FILE}
+            COMMAND glslangValidator -V ${SHADER} -o ${SPIRV_OUTPUT_FILE}
+            DEPENDS ${SHADER}
+            COMMENT "Compiling ${SHADER} to SPIR-V..."
+        )
+        list(APPEND SPIRV_BINARIES ${SPIRV_OUTPUT_FILE})
+    endif()
 endforeach()
 
-add_custom_target(compile_shaders ALL DEPENDS ${SPIRV_BINARIES})
+if(SPIRV_BINARIES)
+    add_custom_target(compile_shaders ALL DEPENDS ${SPIRV_BINARIES})
+endif()
 
 # Source files
 set(SOURCES
@@ -66,7 +73,9 @@ set(FORTRAN_SOURCES
 add_executable(${PROJECT_NAME} ${SOURCES} ${FORTRAN_SOURCES})
 
 # Ensure shaders are compiled before building the executable
-add_dependencies(${PROJECT_NAME} compile_shaders)
+if(SPIRV_BINARIES)
+    add_dependencies(${PROJECT_NAME} compile_shaders)
+endif()
 
 # Link Vulkan, GLM, and other necessary libraries
 target_link_libraries(${PROJECT_NAME} Vulkan::Vulkan glfw imgui)
