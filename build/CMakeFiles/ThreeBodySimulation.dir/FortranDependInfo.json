@@ -1,0 +1,23 @@
+{
+	"bmi-installation" : null,
+	"compiler-frontend-variant" : "GNU",
+	"compiler-id" : "GNU",
+	"compiler-simulate-id" : "",
+	"config" : "",
+	"cxx-modules" : {},
+	"dir-cur-bld" : "E:/Git Remote Repositories/three-body-problem/build",
+	"dir-cur-src" : "E:/Git Remote Repositories/three-body-problem",
+	"dir-top-bld" : "E:/Git Remote Repositories/three-body-problem/build",
+	"dir-top-src" : "E:/Git Remote Repositories/three-body-problem",
+	"exports" : [],
+	"forward-modules-from-target-dirs" : [],
+	"include-dirs" : 
+	[
+		"E:\\Vulkan_SDK\\Include"
+	],
+	"language" : "Fortran",
+	"linked-target-dirs" : [],
+	"module-dir" : "E:/Git Remote Repositories/three-body-problem/build",
+	"submodule-ext" : ".smod",
+	"submodule-sep" : "@"
+}
