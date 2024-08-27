@@ -85,6 +85,32 @@ Follow the [installation guide](#installation-guide) for detailed instructions a
     make
     ```
 
+## Testing
+We are using [Gtest]([url](https://github.com/google/googletest)) for basic testing. Test files are located in the `tests/` directory.
+
+`tests/test_main.cpp``:
+```cpp
+#include <gtest/gtest.h>
+
+// Example test
+TEST(InitializationTest, BasicTest) {
+    // Replace this with actual initialization code
+    ASSERT_TRUE(true);  // Example assertion
+}
+
+```
+
+### How to Run Tests
+
+After building the project, you can run the tests using `ctest`:
+
+```sh
+mkdir build
+cd build
+cmake ..
+cmake --build .
+ctest
+```
 
 ## Installation Guide
 [](#installation-guide)
