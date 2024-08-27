@@ -1,6 +1,6 @@
 ⚠️As of 26/08/2024, the project is in WIP and may not be functioning as described
 ### TODO
-- Complete CMake configuration
+- ~~Complete CMake configuration~~
 - Set up tests for the app initialisation/library integration
 - Implement a UI slider for parameter 'n' for n body simulation
 
