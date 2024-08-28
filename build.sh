@@ -11,3 +11,11 @@ cd ..
 
 # Run CMake to configure the build system
 cmake -B build
+
+# Compile the build files
+cmake --build build
+
+# Run the tests
+cd build
+ctest
+cd ..
