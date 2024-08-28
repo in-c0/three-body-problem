@@ -66,29 +66,31 @@ Follow the [installation guide](#installation-guide) for detailed instructions a
     cd three-body-simulation
     ```
 
-2. **Set up the Build Directory:**
+2. **Build the Project:**
 
+    To build the project, simply run the provided `build.sh` script by typing:
     ```bash
-    mkdir build
-    cd build
+     ./build.sh
     ```
 
-3. **Generate the Build Files with CMake:**
-
+    If, at any point, manual building using CMake is required, you can trigger it by:
     ```bash
-    cmake ..
-    ```
-
-4. **Build the Project:**
-
-    ```bash
-    make
-    ```
+    cmake -B build
+    ```    
+    This will create a new `/build` directory under your root project directory.
+    If you encounter any error during the build process, make sure that the build directory is clean before triggering a build.
+    The following command will **remove everything** in the build directory:
+      ```
+     cd build
+     rm -rf *
+     cd ..
+     cmake -B build
+     ```
 
 ## Testing
 We are using [Gtest]([url](https://github.com/google/googletest)) for basic testing. Test files are located in the `tests/` directory.
 
-`tests/test_main.cpp``:
+Example:
 ```cpp
 #include <gtest/gtest.h>
 
@@ -115,29 +117,70 @@ ctest
 ## Installation Guide
 [](#installation-guide)
 
-### 1. CMake (version 3.10 or higher)
-CMake is a cross-platform build system that helps manage the build process of software using a simple, platform-independent configuration file.
+## Recommended setup (for Windows): WSL and Ubuntu (22.04 LTS)
+Install [WSL]([url](https://learn.microsoft.com/en-us/windows/wsl/install)) and [Ubuntu (22.04)]([url](https://ubuntu.com/download#products))
+(Windows Subsystem for Linux (WSL) lets developers install a Linux distribution (such as Ubuntu) on Windows)
 
-#### Installation:
-- **Linux**: Install via your package manager (e.g., `sudo apt-get install cmake` for Ubuntu).
-- **macOS**: Install via Homebrew: `brew install cmake`.
-- **Windows**: Download and install from the [official website](https://cmake.org/download/).
+#### 1. Open Ubuntu and navigate to the cloned project directory.
+If your project is located in the Windows file system, e.g. `C:\Users\YourName\yourproject`, you can access them from WSL under:
+`/mnt/c/Users/YourName/yourproject`.
 
-### 2. Fortran Compiler
+#### 2. Make sure you have all the necessary dependencies installed and up-to-date by typing the following commands:
+```
+ sudo apt-get install gfortran
+ sudo apt-get install build-essential
+ sudo apt install -y vulkan-utils libvulkan-dev
+ sudo apt install xz-utils
+ sudo apt install qtbase5-dev qtwayland5
+```
+This will install GFortran, CMake and Vulkan SDK on your WSL Ubuntu environment.
+
+
+Alternatively, you can download via:
+[GFortran]([url](https://fortran-lang.org/learn/os_setup/install_gfortran/))
 A Fortran compiler is required to compile the Fortran source code.
 
-#### Recommended: gfortran
-- **Linux**: Install via your package manager (e.g., `sudo apt-get install gfortran` for Ubuntu).
-- **macOS**: Install via Homebrew: `brew install gcc` (gfortran is included).
-- **Windows**: Install via [MinGW](http://www.mingw.org/) or [Cygwin](https://www.cygwin.com/).
+[CMake]([url](https://cmake.org/download/)) (version 3.10 or higher)
+CMake is a cross-platform build system that helps manage the build process of software using a simple, platform-independent configuration file.
 
-### 3. Vulkan SDK
+[Vulkan]([url](https://vulkan.lunarg.com/doc/sdk/1.3.290.0/linux/getting_started.html))
 The Vulkan SDK includes the Vulkan libraries, drivers, and development tools needed for building Vulkan applications.
 
-#### Installation:
-- **Linux**: Download the latest version from the [LunarG Vulkan SDK](https://vulkan.lunarg.com/sdk/home).
-- **macOS**: Download the latest version from the [LunarG Vulkan SDK](https://vulkan.lunarg.com/sdk/home). Note that Vulkan support on macOS is provided through MoltenVK.
-- **Windows**: Download and install from the [LunarG Vulkan SDK](https://vulkan.lunarg.com/sdk/home).
+If any of the installation fails, ensure your system is up-to-date:
+```
+ sudo apt update
+ sudo apt upgrade
+```
+
+If you're not on the latest Ubuntu LTS version (e.g., 22.04 LTS), you can upgrade by:
+ ```
+ sudo do-release-upgrade
+ ```
+
+If this doesn't fix the issue, consider re-installing WSL and Ubuntu by following these steps:
+ 1. Open PowerShell or Command Prompt and run:
+ 2. Uninstall the current Ubuntu distribution:
+ ```
+ wsl --unregister Ubuntu
+ (or check `wsl --list --verbose` for specific distribution name to unregsiter)
+ ```
+ 3. Reinstall Ubuntu LTS:
+ ```
+ wsl --install -d Ubuntu-22.04
+ ```
+
+#### 3. Now you should be able to build the project by navigating to the project root directory and typing:
+ 
+ `cmake -B build`
+
+ Ensure that the build directory is clean before triggering a build. The following command will **remove everything** in the build directory:
+  ```
+ cd build
+ rm -rf *
+ cd ..
+ cmake -B build
+ ```
+
 
 ### Setting Up Dependencies
 
