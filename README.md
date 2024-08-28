@@ -48,7 +48,7 @@ three-body-simulation/
 
 To build and run this project, you need the following dependencies installed:
 
-- **CMake** (version 3.10 or higher)
+- **CMake** (version 3.10 or higher) (cross-platform build system)
 - **Fortran Compiler** (e.g., gfortran)
 - **Vulkan SDK** (including Vulkan libraries and drivers)
 - **GLFW** (for window management)
@@ -122,6 +122,8 @@ If your project is located in the Windows file system (e.g. `C:\Users\YourName\y
 ### 2.Install and Update Dependencies
 You can install them by typing the following commands:
 ```bash
+ sudo apt update
+ sudo apt upgrade
  sudo apt-get install gfortran
  sudo apt-get install build-essential
  sudo apt install -y vulkan-utils libvulkan-dev
@@ -130,36 +132,7 @@ You can install them by typing the following commands:
 ```
 This will install GFortran, CMake and Vulkan SDK on your WSL Ubuntu environment.
 
-
-Alternatively, you can download via:
-[GFortran]([url](https://fortran-lang.org/learn/os_setup/install_gfortran/)) - A Fortran compiler is required to compile the Fortran source code.
-[CMake]([url](https://cmake.org/download/)) (version 3.10 or higher) - CMake is a cross-platform build system that helps manage the build process of software using a simple, platform-independent configuration file.
-[Vulkan]([url](https://vulkan.lunarg.com/doc/sdk/1.3.290.0/linux/getting_started.html)) - The Vulkan SDK includes the Vulkan libraries, drivers, and development tools needed for building Vulkan applications.
-
-If any of these commands fails, ensure your system is up-to-date:
-```
- sudo apt update
- sudo apt upgrade
-```
-
-If you're not on the latest Ubuntu LTS version (e.g., 22.04 LTS), you can upgrade by:
- ```
- sudo do-release-upgrade
- ```
-
-If this doesn't fix the issue, consider re-installing WSL and Ubuntu by following these steps:
- 1. Open PowerShell or Command Prompt and run:
- 3. Uninstall the current Ubuntu distribution:
-     ```
-     wsl --unregister Ubuntu
-     ```     
-     (or check `wsl --list --verbose` for specific distribution name to unregsiter)
- 4. Reinstall Ubuntu LTS:
-     ```
-     wsl --install -d Ubuntu-22.04
-     ```
-
-### 3. Now you should be able to build the project by navigating to the project root directory and typing:
+Now you should be able to build the project by navigating to the project root directory and typing:
  
  ```
   ./build.sh
@@ -227,6 +200,38 @@ The following command will **remove everything** in the build directory:
  cd ..
  cmake -B build
  ```
+
+
+### Troubleshooting Installation
+
+If any of the installation commands fails, ensure your system is up-to-date:
+```
+ sudo apt update
+ sudo apt upgrade
+```
+
+If you're not on the latest Ubuntu LTS version (e.g., 22.04 LTS), you can upgrade by:
+ ```
+ sudo do-release-upgrade
+ ```
+
+If this doesn't fix the issue, consider re-installing WSL and Ubuntu by following these steps:
+ 1. Open PowerShell or Command Prompt and run:
+ 3. Uninstall the current Ubuntu distribution:
+     ```
+     wsl --unregister Ubuntu
+     ```     
+     (or check `wsl --list --verbose` for specific distribution name to unregsiter)
+ 4. Reinstall Ubuntu LTS:
+     ```
+     wsl --install -d Ubuntu-22.04
+     ```
+
+If you prefer to work on a non-WSL/Ubuntu environment, or if you've encountered unsolvable issues during installation, you can download the prerequisite libraries from the official websites:
+- [GFortran](https://fortran-lang.org/learn/os_setup/install_gfortran/)
+- [CMake](https://cmake.org/download/) (version 3.10 or higher)
+- [Vulkan](https://vulkan.lunarg.com/doc/sdk/1.3.290.0/linux/getting_started.html)
+
 
 ## License
 
