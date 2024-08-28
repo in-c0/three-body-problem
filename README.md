@@ -121,66 +121,57 @@ ctest
 Install [WSL]([url](https://learn.microsoft.com/en-us/windows/wsl/install)) and [Ubuntu (22.04)]([url](https://ubuntu.com/download#products))
 (Windows Subsystem for Linux (WSL) lets developers install a Linux distribution (such as Ubuntu) on Windows)
 
-#### 1. Open Ubuntu and navigate to the cloned project directory.
-If your project is located in the Windows file system, e.g. `C:\Users\YourName\yourproject`, you can access them from WSL under:
-`/mnt/c/Users/YourName/yourproject`.
+### 1. Open Ubuntu and navigate to the cloned project directory.
+If your project is located in the Windows file system (e.g. `C:\Users\YourName\yourproject`), you can access them from WSL/Ubuntu under:
+```
+/mnt/c/Users/YourName/yourproject
+```
 
-#### 2. Make sure you have all the necessary dependencies installed and up-to-date by typing the following commands:
-```
- sudo apt-get install gfortran
- sudo apt-get install build-essential
- sudo apt install -y vulkan-utils libvulkan-dev
- sudo apt install xz-utils
- sudo apt install qtbase5-dev qtwayland5
-```
+### 2. Make sure you have all the necessary dependencies installed and up-to-date.
+You can install them by typing the following commands:
+    ```bash
+     sudo apt-get install gfortran
+     sudo apt-get install build-essential
+     sudo apt install -y vulkan-utils libvulkan-dev
+     sudo apt install xz-utils
+     sudo apt install qtbase5-dev qtwayland5
+    ```
 This will install GFortran, CMake and Vulkan SDK on your WSL Ubuntu environment.
 
 
 Alternatively, you can download via:
-[GFortran]([url](https://fortran-lang.org/learn/os_setup/install_gfortran/))
-A Fortran compiler is required to compile the Fortran source code.
-
-[CMake]([url](https://cmake.org/download/)) (version 3.10 or higher)
-CMake is a cross-platform build system that helps manage the build process of software using a simple, platform-independent configuration file.
-
-[Vulkan]([url](https://vulkan.lunarg.com/doc/sdk/1.3.290.0/linux/getting_started.html))
-The Vulkan SDK includes the Vulkan libraries, drivers, and development tools needed for building Vulkan applications.
+[GFortran]([url](https://fortran-lang.org/learn/os_setup/install_gfortran/)) - A Fortran compiler is required to compile the Fortran source code.
+[CMake]([url](https://cmake.org/download/)) (version 3.10 or higher) - CMake is a cross-platform build system that helps manage the build process of software using a simple, platform-independent configuration file.
+[Vulkan]([url](https://vulkan.lunarg.com/doc/sdk/1.3.290.0/linux/getting_started.html)) - The Vulkan SDK includes the Vulkan libraries, drivers, and development tools needed for building Vulkan applications.
 
 If any of the installation fails, ensure your system is up-to-date:
-```
- sudo apt update
- sudo apt upgrade
-```
+    ```
+     sudo apt update
+     sudo apt upgrade
+    ```
 
 If you're not on the latest Ubuntu LTS version (e.g., 22.04 LTS), you can upgrade by:
- ```
- sudo do-release-upgrade
- ```
+     ```
+     sudo do-release-upgrade
+     ```
 
 If this doesn't fix the issue, consider re-installing WSL and Ubuntu by following these steps:
  1. Open PowerShell or Command Prompt and run:
  2. Uninstall the current Ubuntu distribution:
- ```
- wsl --unregister Ubuntu
- (or check `wsl --list --verbose` for specific distribution name to unregsiter)
- ```
+     ```
+     wsl --unregister Ubuntu
+     (or check `wsl --list --verbose` for specific distribution name to unregsiter)
+     ```
  3. Reinstall Ubuntu LTS:
- ```
- wsl --install -d Ubuntu-22.04
- ```
+     ```
+     wsl --install -d Ubuntu-22.04
+     ```
 
-#### 3. Now you should be able to build the project by navigating to the project root directory and typing:
+### 3. Now you should be able to build the project by navigating to the project root directory and typing:
  
- `cmake -B build`
-
- Ensure that the build directory is clean before triggering a build. The following command will **remove everything** in the build directory:
-  ```
- cd build
- rm -rf *
- cd ..
- cmake -B build
  ```
-
+  ./build.sh
+ ```
 
 ### Setting Up Dependencies
 
