@@ -77,6 +77,11 @@ Follow the [installation guide](#installation-guide) for detailed instructions a
 ## Testing
 We are using [Gtest]([url](https://github.com/google/googletest)) for basic testing. Test files are located in the `tests/` directory.
 
+You will need to have Gtest installed on your system:
+```
+sudo apt-get install libgtest-dev
+```
+
 Example:
 ```cpp
 #include <gtest/gtest.h>
