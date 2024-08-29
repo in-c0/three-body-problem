@@ -18,7 +18,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt update
-        sudo apt install -y cmake g++ libvulkan-dev wayland-protocols
+        sudo apt install -y cmake g++ libvulkan-dev libwayland-dev wayland-protocols
         
     - name: Checkout code
       uses: actions/checkout@v3
