@@ -18,7 +18,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt update
-        sudo apt-get install -y cmake g++ libvulkan-dev libxinerama \
+        sudo apt-get install -y cmake g++ libvulkan-dev libxinerama-dev \
                             libwayland-dev wayland-protocols \
                             libxkbcommon-dev \
                             libxcb1-dev libx11-dev \
@@ -32,7 +32,7 @@ jobs:
                             libssl-dev \
                             libffi-dev \
                             zlib1g-dev
-                            
+
     - name: Get missing dependency and Retry build
       run: |
         mkdir build
