@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.16)
 project(ThreeBodySimulation LANGUAGES CXX Fortran)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -11,17 +11,28 @@ set(FORTRAN_SOURCES
     fortran/three_body.f90
 )
 
+# Add submodules
+add_subdirectory(third_party/glfw)
+
+# Add executable with your source files
 add_executable(${PROJECT_NAME}
     src/main.cpp
+    src/vulkan_setup.cpp
+    src/vulkan_setup.h
     ${FORTRAN_SOURCES}
 )
 
 include_directories(
     ${Vulkan_INCLUDE_DIRS}
+    ${GLFW_INCLUDE_DIRS}
+    third_party/glfw/include
 )
 
+# Link Vulkan and GLFW libraries
 target_link_libraries(${PROJECT_NAME}
     ${Vulkan_LIBRARIES}
+    glfw
+    Vulkan::Vulkan
 )
 
 # Testing setup (GoogleTest)
