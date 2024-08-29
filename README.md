@@ -235,9 +235,23 @@ If you prefer to work on a non-WSL/Ubuntu environment, or if you've encountered 
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+See the [LICENSE](LICENSE) file for details.
+
+This project has some third-party dependencies, each of which may have independent licensing:
+
+* [glfw](https://github.com/glfw/glfw): A multi-platform library for OpenGL, OpenGL ES, Vulkan, window and input
+* [glm](https://github.com/g-truc/glm): OpenGL Mathematics
+* [glslang](https://github.com/KhronosGroup/glslang): Shader front end and validator
+* [dear imgui](https://github.com/ocornut/imgui): Immediate Mode Graphical User Interface
+* [vulkan](https://github.com/KhronosGroup/Vulkan-Docs): Sources for the formal documentation of the Vulkan API
 
 ## Acknowledgments
+
+### N-Body Simulation
+
+This project builds upon the `compute_nbody` sample from the [Vulkan-Samples](https://github.com/KhronosGroup/Vulkan-Samples) repository by Khronos Group.
+
+The base implementation can be found in the [`compute_nbody.cpp` file](https://github.com/KhronosGroup/Vulkan-Samples/tree/main/samples/api/compute_nbody), which has been adapted to meet our project's requirements. Full credit to the original authors, and we maintain the original licensing terms as stipulated under the Apache License 2.0.
 
 - [LunarG Vulkan SDK](https://vulkan.lunarg.com/) - Graphics API
 - [Dear ImGui](https://github.com/ocornut/imgui) - GUI
