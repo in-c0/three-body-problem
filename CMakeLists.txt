@@ -1,20 +1,37 @@
 cmake_minimum_required(VERSION 3.16)
-project(ThreeBodySimulation LANGUAGES CXX Fortran)
+project(ThreeBodySimulation LANGUAGES CXX)
 
+# Set up C++ and Fortran standards
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
-set(CMAKE_Fortran_COMPILER gfortran)
+# set(CMAKE_Fortran_COMPILER gfortran)
 
+
+# Vulkan SDK detection from the official Vulkan sample CMakeLists.txt
 find_package(Vulkan REQUIRED)
 
-set(FORTRAN_SOURCES
-    fortran/three_body.f90
-)
+if(Vulkan_FOUND)
+    if(NOT Vulkan_dxc_exe_FOUND)
+        find_program(Vulkan_dxc_EXECUTABLE
+                     NAMES dxc
+                     HINTS
+                     "$ENV{VULKAN_SDK}/Bin"
+                     "$ENV{VULKAN_SDK}/bin")
+    endif()
+    if(Vulkan_dxc_EXECUTABLE)
+        message(STATUS "Found DirectX Shader Compiler under ${Vulkan_dxc_EXECUTABLE}")
+    else()
+        message(STATUS "Couldn't find DirectX Shader Compiler executable, make sure it is present in Vulkan SDK or add it manually via Vulkan_dxc_EXECUTABLE cmake variable. HLSL shaders won't be compiled.")
+    endif()
+endif()
 
-# Add submodules
+# # Your existing source files and subdirectories
+# set(FORTRAN_SOURCES
+#     fortran/three_body.f90
+# )
+
 add_subdirectory(third_party/glfw)
 
-# Add executable with your source files
 add_executable(${PROJECT_NAME}
     src/main.cpp
     src/vulkan_setup.cpp
@@ -28,14 +45,12 @@ include_directories(
     third_party/glfw/include
 )
 
-# Link Vulkan and GLFW libraries
 target_link_libraries(${PROJECT_NAME}
     ${Vulkan_LIBRARIES}
     glfw
     Vulkan::Vulkan
 )
 
-# Testing setup (GoogleTest)
 enable_testing()
 
 include(FetchContent)
