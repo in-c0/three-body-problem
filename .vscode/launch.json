@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "C++ Windows Debug",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/Debug/ThreeBodySimulation.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "preLaunchTask": "build",
+            "logging": {
+                "moduleLoad": false,
+                "trace": true,
+                "engineLogging": false,
+                "programOutput": true,
+                "exceptions": true
+            },
+            "internalConsoleOptions": "openOnSessionStart"
+        }
+    ]
+}
