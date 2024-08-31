@@ -40,7 +40,7 @@ jobs:
 
     - name: Clean previous builds
       run: rm -rf build
-      
+
     - name: Set up CMake
       uses: jwlawson/actions-setup-cmake@v1
 
@@ -51,7 +51,7 @@ jobs:
       run: cmake -B build
 
     - name: Build
-      run: cmake --build build
+      run: cmake --build build --target clean
 
     - name: Run tests
       run: ctest --test-dir build
