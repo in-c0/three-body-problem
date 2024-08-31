@@ -9,10 +9,9 @@
 #if defined(_WIN32) || defined(_WIN64)
     #define VK_USE_PLATFORM_WIN32_KHR
     #include <windows.h>
+    #define GLFW_EXPOSE_NATIVE_WIN32
+    #include <GLFW/glfw3native.h>
 #endif
-
-#define GLFW_EXPOSE_NATIVE_WIN32
-#include <GLFW/glfw3native.h>
 
 #include <iostream>
 #include <stdexcept>
