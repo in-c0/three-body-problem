@@ -38,6 +38,9 @@ jobs:
       with:
         submodules: true  # Ensure that submodules are checked out
 
+    - name: Clean previous builds
+      run: rm -rf build
+      
     - name: Set up CMake
       uses: jwlawson/actions-setup-cmake@v1
 
