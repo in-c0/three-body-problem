@@ -5,6 +5,7 @@
 #include <cstring>
 #include <GLFW/glfw3.h>
 #include <map>
+#include <optional>
 
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
@@ -100,10 +101,6 @@ private:
     // -----------------------------------
     // */
 
-    bool isDeviceSuitable(VkPhysicalDevice device) {
-        return true; // for now we’ll settle for just any GPU
-    }
-
     void pickPhysicalDevice() {
 
         uint32_t deviceCount = 0;
@@ -143,6 +140,52 @@ private:
         // ------------------------------------
         */
     }
+
+    struct QueueFamilyIndices {
+        std::optional<uint32_t> graphicsFamily;
+
+        bool isComplete() {
+            return graphicsFamily.has_value();
+        }
+    };
+
+    bool isDeviceSuitable(VkPhysicalDevice device) {
+        QueueFamilyIndices indices = findQueueFamilies(device);
+
+        return indices.isComplete();
+    }
+
+
+    // Almost every operation in Vulkan requires commands to be submitted to a queue. 
+    // Each queue family allows only a certain type(s) of commands.
+    // We need to check which queue families are supported by the device,
+    // and which of them supports the commands that we want to use. 
+    QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device) {
+        QueueFamilyIndices indices;
+
+        uint32_t queueFamilyCount = 0;
+        vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
+
+        std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
+        vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
+
+        int i = 0;
+        // find queue family that supports VK_QUEUE_GRAPHICS_BIT
+        for (const auto& queueFamily : queueFamilies) {
+            if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
+                indices.graphicsFamily = i;
+            }
+            
+            if (indices.isComplete()) {
+                break;
+            }
+
+            i++;
+        }
+
+        return indices;
+    }
+
 
 
     void mainLoop() {            
