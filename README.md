@@ -1,8 +1,10 @@
 ⚠️As of 26/08/2024, the project is in WIP and may not be functioning as described
 ### TODO
 - ~~Complete CMake configuration~~
-- Set up tests for the app initialisation/library integration
+- ~~Set up tests for the app initialisation/library integration~~
+- Rendering a circumstellar disc
 - Implement a UI slider for parameter 'n' for n body simulation
+- Fortran DLL vertex positional data parsing
 
 #### Sources of Inspiration:
 - https://pavelsevecek.github.io/
