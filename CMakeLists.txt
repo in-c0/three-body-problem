@@ -6,6 +6,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 # set(CMAKE_Fortran_COMPILER gfortran)
 
+if(WIN32)
+    add_definitions(-DVK_USE_PLATFORM_WIN32_KHR)
+endif()
 
 # Vulkan SDK detection from the official Vulkan sample CMakeLists.txt
 find_package(Vulkan REQUIRED)
