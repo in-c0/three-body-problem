@@ -34,8 +34,6 @@ add_subdirectory(third_party/glfw)
 
 add_executable(${PROJECT_NAME}
     src/main.cpp
-    src/vulkan_setup.cpp
-    src/vulkan_setup.h
     ${FORTRAN_SOURCES}
 )
 

@@ -3,7 +3,6 @@
 #include <stdexcept>
 #include <cstring>
 #include <GLFW/glfw3.h>
-#include "vulkan_setup.h"
 
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
@@ -45,7 +44,6 @@ public:
     }
 
 private:
-    VulkanSetup vulkan;
     GLFWwindow* window;
     VkInstance instance;
     VkDebugUtilsMessengerEXT debugMessenger;
@@ -65,6 +63,8 @@ private:
             return;
         }
 
+        createInstance(); //  It's generally better to create the Vulkan instance first before setting up the window
+
 
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
@@ -74,9 +74,6 @@ private:
             return;
         }
 
-        vulkan.init(window);
-
-        createInstance();
         setupDebugMessenger();
 
     }
@@ -95,7 +92,6 @@ private:
         if (enableValidationLayers) {
             DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
         }
-        //vulkan.cleanup();
         
         vkDestroyInstance(instance, nullptr);
 
