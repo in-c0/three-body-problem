@@ -4,6 +4,7 @@
 #include <vector>
 #include <cstring>
 #include <GLFW/glfw3.h>
+#include <map>
 
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
@@ -48,6 +49,7 @@ private:
     GLFWwindow* window;
     VkInstance instance;
     VkDebugUtilsMessengerEXT debugMessenger;
+    VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
 
     void createGraphicsPipeline() {
         // Create Vulkan graphics pipeline (vertex/fragment shaders, etc.)
@@ -77,6 +79,69 @@ private:
 
         setupDebugMessenger();
 
+        pickPhysicalDevice();
+    }
+
+
+    /* -------------- Custom GPU Selection
+    // bool isDeviceSuitable(VkPhysicalDevice device) {
+    //     // Basic device properties like the name, type and supported Vulkan version can be queried using vkGetPhysicalDeviceProperties.
+    //     VkPhysicalDeviceProperties deviceProperties;
+    //     vkGetPhysicalDeviceProperties(device, &deviceProperties);
+
+    //     // The support for optional features like texture compression, 64 bit floats and multi viewport rendering (useful for VR) can be queried using vkGetPhysicalDeviceFeatures:
+    //     VkPhysicalDeviceFeatures deviceFeatures;
+    //     vkGetPhysicalDeviceFeatures(device, &deviceFeatures);
+
+
+    //     return deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU && 
+    //         deviceFeatures.geometryShader;
+    // }
+    // -----------------------------------
+    // */
+
+    bool isDeviceSuitable(VkPhysicalDevice device) {
+        return true; // for now we’ll settle for just any GPU
+    }
+
+    void pickPhysicalDevice() {
+
+        uint32_t deviceCount = 0;
+        vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
+        if (deviceCount == 0) {
+            throw std::runtime_error("failed to find GPUs with Vulkan support!");
+        }
+        std::vector<VkPhysicalDevice> devices(deviceCount);
+        vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
+
+        for (const auto& device : devices) {
+            if (isDeviceSuitable(device)) {
+                physicalDevice = device;
+                break;
+            }
+        }
+        if (physicalDevice == VK_NULL_HANDLE) {
+            throw std::runtime_error("failed to find a suitable GPU!");
+        }       
+        
+        /* 
+        // -----------Custom Device Selection
+        // // Use an ordered map to automatically sort candidates by increasing score
+        // std::multimap<int, VkPhysicalDevice> candidates;
+
+        // for (const auto& device : devices) {
+        //     int score = rateDeviceSuitability(device);
+        //     candidates.insert(std::make_pair(score, device));
+        // }
+
+        // Check if the best candidate is suitable at all
+        if (candidates.rbegin()->first > 0) {
+            physicalDevice = candidates.rbegin()->second;
+        } else {
+            throw std::runtime_error("failed to find a suitable GPU!");
+        }
+        // ------------------------------------
+        */
     }
 
 
