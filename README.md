@@ -3,8 +3,8 @@
 - ~~Complete CMake configuration~~
 - ~~Set up tests for the app initialisation/library integration~~
 - ~~Setting up graphics pipeline~~
-    - Fixed function states
-    - Render pass
+    ~~- Fixed function states~~
+    ~~- Render pass~~
 - Rendering a circumstellar disc
 - Implement a UI slider for parameter 'n' for n body simulation
 - Fortran DLL vertex positional data parsing
