@@ -6,7 +6,7 @@
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
-#if defined(_WIN32) || defined(_WIN64)
+#if defined(_WIN32)
     #define VK_USE_PLATFORM_WIN32_KHR
     #include <windows.h>
     #define GLFW_EXPOSE_NATIVE_WIN32
