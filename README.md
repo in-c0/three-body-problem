@@ -2,9 +2,9 @@
 ### TODO
 - ~~Complete CMake configuration~~
 - ~~Set up tests for the app initialisation/library integration~~
-- Setting up graphics pipeline
-![image](https://github.com/user-attachments/assets/24a00e5e-3efe-4e7e-ad9a-dc6ca67d579e)
-
+- ~~Setting up graphics pipeline~~
+    - Fixed function states
+    - Render pass
 - Rendering a circumstellar disc
 - Implement a UI slider for parameter 'n' for n body simulation
 - Fortran DLL vertex positional data parsing
