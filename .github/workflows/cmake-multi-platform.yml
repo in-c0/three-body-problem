@@ -31,7 +31,8 @@ jobs:
                             libdbus-1-dev \
                             libssl-dev \
                             libffi-dev \
-                            zlib1g-dev
+                            zlib1g-dev \
+                            libglm-dev
 
     - name: Checkout code
       uses: actions/checkout@v3
