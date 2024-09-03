@@ -7,6 +7,7 @@
     ~~- Render pass~~
 ~~- Rendering a circumstellar disc~~
 - Rendering gas and dust accretion
+  (Optional: Use ray tracing extension)
 - Implement a UI slider for parameter 'n' for n body simulation
 - Fortran DLL vertex positional data parsing
 
