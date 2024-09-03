@@ -118,6 +118,10 @@ struct UniformBufferObject {
     glm::mat4 proj;
 };
 
+struct GlowSettings {
+    float radius;
+    float glowIntensity;
+};
 
 // use either uint16_t or uint32_t for your index buffer, uint16_t for less than 65535 unique vertices.
 std::vector<uint16_t> indices;
@@ -178,11 +182,24 @@ private:
     VkDescriptorPool descriptorPool;
     std::vector<VkDescriptorSet> descriptorSets;
 
+    VkBuffer glowSettingsBuffer;
+    VkDeviceMemory glowSettingsBufferMemory;
+
     const std::vector<const char*> deviceExtensions = {
         VK_KHR_SWAPCHAIN_EXTENSION_NAME
     };
 
     int segmentCount = 32;
+
+
+    void createGlowSettingsBuffer() {
+        VkDeviceSize bufferSize = sizeof(GlowSettings);
+
+        createBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, 
+                    VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, 
+                    glowSettingsBuffer, glowSettingsBufferMemory);
+
+    }
 
     std::vector<uint16_t> generateCircleIndices(int segmentCount) {
         std::vector<uint16_t> indices;
@@ -345,18 +362,20 @@ private:
 
         VkPipelineColorBlendAttachmentState colorBlendAttachment{};
         colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-        colorBlendAttachment.blendEnable = VK_FALSE;
+        colorBlendAttachment.blendEnable = VK_TRUE;
+        colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+        colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+        colorBlendAttachment.colorBlendOp = VK_BLEND_OP_ADD;
+        colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+        colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+        colorBlendAttachment.alphaBlendOp = VK_BLEND_OP_ADD;
 
         VkPipelineColorBlendStateCreateInfo colorBlending{};
         colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
         colorBlending.logicOpEnable = VK_FALSE;
-        colorBlending.logicOp = VK_LOGIC_OP_COPY;
         colorBlending.attachmentCount = 1;
         colorBlending.pAttachments = &colorBlendAttachment;
-        colorBlending.blendConstants[0] = 0.0f;
-        colorBlending.blendConstants[1] = 0.0f;
-        colorBlending.blendConstants[2] = 0.0f;
-        colorBlending.blendConstants[3] = 0.0f;
+
 
         std::vector<VkDynamicState> dynamicStates = {
             VK_DYNAMIC_STATE_VIEWPORT,
@@ -543,6 +562,7 @@ private:
         createVertexBuffer();
         createIndexBuffer();
         createUniformBuffers();
+        createGlowSettingsBuffer();
         createDescriptorPool();
         createDescriptorSets();
         createCommandBuffers();
@@ -852,20 +872,29 @@ private:
     void createDescriptorSetLayout() {
         VkDescriptorSetLayoutBinding uboLayoutBinding{};
         uboLayoutBinding.binding = 0;
-        uboLayoutBinding.descriptorCount = 1;
         uboLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        uboLayoutBinding.pImmutableSamplers = nullptr;
+        uboLayoutBinding.descriptorCount = 1;
         uboLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+        uboLayoutBinding.pImmutableSamplers = nullptr;
 
+        VkDescriptorSetLayoutBinding glowLayoutBinding{};
+        glowLayoutBinding.binding = 1;
+        glowLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        glowLayoutBinding.descriptorCount = 1;
+        glowLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+        glowLayoutBinding.pImmutableSamplers = nullptr;
+
+        std::array<VkDescriptorSetLayoutBinding, 2> bindings = {uboLayoutBinding, glowLayoutBinding};
         VkDescriptorSetLayoutCreateInfo layoutInfo{};
         layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-        layoutInfo.bindingCount = 1;
-        layoutInfo.pBindings = &uboLayoutBinding;
+        layoutInfo.bindingCount = static_cast<uint32_t>(bindings.size());
+        layoutInfo.pBindings = bindings.data();
 
         if (vkCreateDescriptorSetLayout(device, &layoutInfo, nullptr, &descriptorSetLayout) != VK_SUCCESS) {
             throw std::runtime_error("failed to create descriptor set layout!");
         }
     }
+
 
     bool isDeviceSuitable(VkPhysicalDevice device) {
         QueueFamilyIndices indices = findQueueFamilies(device);
@@ -1096,6 +1125,9 @@ private:
     void cleanup() { 
         
         cleanupSwapChain();
+
+        vkDestroyBuffer(device, glowSettingsBuffer, nullptr);
+        vkFreeMemory(device, glowSettingsBufferMemory, nullptr);
 
         for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
             vkDestroyBuffer(device, uniformBuffers[i], nullptr);
@@ -1390,11 +1422,24 @@ private:
         ubo.proj[1][1] *= -1;
 
         memcpy(uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
+
+        updateGlowSettingsBuffer();
     }
 
+    void updateGlowSettingsBuffer() {
+        GlowSettings glowSettings;
+        glowSettings.radius = 5.0f;  //  radius should be a bit bigger than the circle size to make it look glowy
+        glowSettings.glowIntensity = 5.0f;
 
+        void* data;
+        
+        if (vkMapMemory(device, glowSettingsBufferMemory, 0, sizeof(glowSettings), 0, &data) != VK_SUCCESS) {
+            throw std::runtime_error("Failed to update glow settings buffer!");
+        }
 
-
+        memcpy(data, &glowSettings, sizeof(glowSettings));
+        vkUnmapMemory(device, glowSettingsBufferMemory);
+    }
 
     void createDescriptorPool() {
         VkDescriptorPoolSize poolSize{};
@@ -1428,25 +1473,38 @@ private:
         }
 
         for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-            VkDescriptorBufferInfo bufferInfo{};
-            bufferInfo.buffer = uniformBuffers[i];
-            bufferInfo.offset = 0;
-            bufferInfo.range = sizeof(UniformBufferObject);
+            VkDescriptorBufferInfo uboBufferInfo{};
+            uboBufferInfo.buffer = uniformBuffers[i];
+            uboBufferInfo.offset = 0;
+            uboBufferInfo.range = sizeof(UniformBufferObject);
 
-            VkWriteDescriptorSet descriptorWrite{};
-            descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-            descriptorWrite.dstSet = descriptorSets[i];
-            descriptorWrite.dstBinding = 0;
-            descriptorWrite.dstArrayElement = 0;
-            descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-            descriptorWrite.descriptorCount = 1;
-            descriptorWrite.pBufferInfo = &bufferInfo;
-            descriptorWrite.pImageInfo = nullptr; // Optional
-            descriptorWrite.pTexelBufferView = nullptr; // Optional
+            VkDescriptorBufferInfo glowBufferInfo{};
+            glowBufferInfo.buffer = glowSettingsBuffer;
+            glowBufferInfo.offset = 0;
+            glowBufferInfo.range = sizeof(GlowSettings);
 
-            vkUpdateDescriptorSets(device, 1, &descriptorWrite, 0, nullptr);
+            std::array<VkWriteDescriptorSet, 2> descriptorWrites{};
+
+            descriptorWrites[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            descriptorWrites[0].dstSet = descriptorSets[i];
+            descriptorWrites[0].dstBinding = 0; // This needs to match  layout(binding = 0) in our shaders
+            descriptorWrites[0].dstArrayElement = 0;
+            descriptorWrites[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+            descriptorWrites[0].descriptorCount = 1;
+            descriptorWrites[0].pBufferInfo = &uboBufferInfo;
+
+            descriptorWrites[1].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            descriptorWrites[1].dstSet = descriptorSets[i];
+            descriptorWrites[1].dstBinding = 1;  // This needs to match  layout(binding = 1) in our shaders
+            descriptorWrites[1].dstArrayElement = 0;
+            descriptorWrites[1].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+            descriptorWrites[1].descriptorCount = 1;
+            descriptorWrites[1].pBufferInfo = &glowBufferInfo;
+
+            vkUpdateDescriptorSets(device, static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
         }
     }
+
 
 
     // to handle resizing of the window
