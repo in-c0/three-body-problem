@@ -5,11 +5,13 @@
 - ~~Setting up graphics pipeline~~
     ~~- Fixed function states~~
     ~~- Render pass~~
-- Rendering a circumstellar disc
+~~- Rendering a circumstellar disc~~
+- Rendering gas and dust accretion
 - Implement a UI slider for parameter 'n' for n body simulation
 - Fortran DLL vertex positional data parsing
 
 #### Sources of Inspiration:
+- https://www.youtube.com/watch?v=7ytXHP3oTPo
 - https://pavelsevecek.github.io/
 - https://github.com/pavelsevecek/OpenSPH
 - https://www.youtube.com/watch?v=VVIPjRxDKHc 
