@@ -118,17 +118,9 @@ struct UniformBufferObject {
     glm::mat4 proj;
 };
 
-const std::vector<Vertex> vertices = {
-    {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-    {{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
-    {{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
-    {{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
-};
 
 // use either uint16_t or uint32_t for your index buffer, uint16_t for less than 65535 unique vertices.
-const std::vector<uint16_t> indices = {
-    0, 1, 2, 2, 3, 0
-};
+std::vector<uint16_t> indices;
 
 class three_body_simulation { 
 public:
@@ -190,6 +182,22 @@ private:
         VK_KHR_SWAPCHAIN_EXTENSION_NAME
     };
 
+    int segmentCount = 32;
+
+    std::vector<uint16_t> generateCircleIndices(int segmentCount) {
+        std::vector<uint16_t> indices;
+
+        // The first index is the center vertex
+        indices.push_back(0);
+
+        // Each pair of vertices around the circumference forms a triangle with the center
+        for (int i = 1; i <= segmentCount; ++i) {
+            indices.push_back(i);                // Current vertex
+            indices.push_back((i % segmentCount) + 1);  // Next vertex, wraps around to the first vertex
+        }
+
+        return indices;
+    }
 
     std::vector<Vertex> createCircleVertices(float radius, int segmentCount) {
         
@@ -312,7 +320,7 @@ private:
 
         VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
         inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-        inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+        inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_FAN; // triangle_fan for circles
         inputAssembly.primitiveRestartEnable = VK_FALSE;
 
         VkPipelineViewportStateCreateInfo viewportState{};
@@ -962,7 +970,7 @@ private:
         // Here, we create a staging buffer in CPU-accessible memory to upload the data from the vertex array
         // We then copy it to the final vertex buffer in GPU-accessible (device local) memory. 
         // This way, you ensure the GPU has the best possible performance while still being able to easily update the data when needed.        
-//        std::vector<Vertex> vertices = createCircleVertices(0.5f, 32);
+        std::vector<Vertex> vertices = createCircleVertices(0.5f, 32);
         VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
 
         VkBuffer stagingBuffer;
@@ -986,7 +994,8 @@ private:
         // We went for the first approach, which ensures that the mapped memory always matches the contents of the allocated memory. Do keep in mind that this may lead to slightly worse performance than explicit flushing
     }
 
-    void createIndexBuffer() {
+    void createIndexBuffer() {        
+        indices = generateCircleIndices(segmentCount);
         VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
 
         VkBuffer stagingBuffer;
@@ -1363,13 +1372,28 @@ private:
         float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
         UniformBufferObject ubo{};
-        ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-        ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-        ubo.proj = glm::perspective(glm::radians(45.0f), swapChainExtent.width / (float) swapChainExtent.height, 0.1f, 10.0f);
+        // Move the circle along a path
+        float x = sin(time) * 0.5f;  // Move in the x-axis
+        float y = cos(time) * 0.5f;  // Move in the y-axis
+        ubo.model = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, -1.0f));  // Moving further back along the Z-axis
+
+        // Position the camera to ensure it views the circle correctly
+        ubo.view = glm::lookAt(
+            glm::vec3(0.0f, 0.0f, 3.0f),  // Camera is 3 units back from the origin
+            glm::vec3(0.0f, 0.0f, 0.0f),  // Looking at the origin
+            glm::vec3(0.0f, 1.0f, 0.0f)   // Up direction
+        );
+
+        // Use a perspective projection with a suitable field of view
+        float aspectRatio = swapChainExtent.width / static_cast<float>(swapChainExtent.height);
+        ubo.proj = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 10.0f);
         ubo.proj[1][1] *= -1;
 
         memcpy(uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
     }
+
+
+
 
 
     void createDescriptorPool() {
