@@ -26,7 +26,7 @@ A real-time simulation of the three-body problem using Fortran, wrapped in C++ a
 ## Overview
 ### Project Structure
 ```
-three-body-simulation/
+three-body-problem/
 ├── CMakeLists.txt                       # CMake build configuration
 ├── README.md            
 ├── LICENSE             
@@ -70,8 +70,8 @@ Follow the [installation guide](#installation-guide) for detailed instructions a
 1. **Clone the Repository:**
 
     ```bash
-    git clone https://github.com/in-c0/three-body-simulation.git
-    cd three-body-simulation
+    git clone https://github.com/in-c0/three-body-problem.git
+    cd three-body-problem
     ```
 
 2. **Build the Project:**
