@@ -1,0 +1,28 @@
+{
+    "configurations": [
+        {
+            "name": "WSL",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "third_party/glfw",
+                "third_party/"
+            ],
+            "defines": [],
+            "compilerPath": "E:\\Downloads\\w64devkit\\bin\\gcc.exe",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-x64",
+            "browse": {
+                "path": [
+                    "/usr/include",
+                    "/usr/include/vulkan",
+                    "/usr/include/GLFW",
+                    "${workspaceFolder}"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            }
+        }
+    ],
+    "version": 4
+}
